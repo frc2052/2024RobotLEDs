@@ -22,6 +22,7 @@
 #define MODE_NO_AUTO 9
 #define MODE_BLUE_AUTO 10
 #define MODE_RED_AUTO 11
+#define MODE_IS_AMP_IDLING 12
 
 #define OLED_CLOCK 18
 #define OLED_DATA 17
@@ -118,6 +119,10 @@ void initLightPattern(int code){
     }
     case MODE_RED_AUTO: {
       fire.init();
+      break;
+    }
+    case MODE_IS_AMP_IDLING: {
+      bounce.init(CRGB::Turquoise, CRGB::HotPink, 4, 30, 15);
       break;
     }
     case 20: {
