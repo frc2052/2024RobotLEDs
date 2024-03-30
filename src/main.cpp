@@ -23,6 +23,10 @@
 #define MODE_BLUE_AUTO 10
 #define MODE_RED_AUTO 11
 
+#define OLED_CLOCK 18
+#define OLED_DATA 17
+#define OLED_RESET 21
+
 CRGB g_leds[NUM_LEDS]; //create our LED array object for all our LEDs
 int lastCode = -1;
 unsigned long lastScreenUpdate = 0;
@@ -30,7 +34,11 @@ unsigned long lastScreenUpdate = 0;
 PinReader reader = PinReader();
 
 //always use a hardware (HW) version of the screen when possible to avoid studdering in light effects
-U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);   // Adafruit Feather ESP8266/32u4 Boards + FeatherWing OLED
+// U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);   // Adafruit Feather ESP8266/32u4 Boards + FeatherWing OLED
+U8G2_SSD1306_128X64_NONAME_F_SW_I2C g_OLED(U8G2_R2, OLED_CLOCK, OLED_DATA, OLED_RESET);
+
+
+
 
 Pulse pulse = Pulse();
 Fire fire = Fire();
@@ -45,10 +53,10 @@ void updateCodeOnScreen(int code){
     lastScreenUpdate = millis();
     std::string intStr = "Code " + std::to_string(code);
 
-    u8g2.clearBuffer();					// clear the internal memory
-    u8g2.setFont(u8g2_font_fub20_tr);	// choose a suitable font
-    u8g2.drawStr(0,30, intStr.c_str());	// write something to the internal memory
-    u8g2.sendBuffer();					// transfer internal memory to the display
+    g_OLED.clearBuffer();					// clear the internal memory
+    g_OLED.setFont(u8g2_font_fub20_tr);	// choose a suitable font
+    g_OLED.drawStr(0,30, intStr.c_str());	// write something to the internal memory
+    g_OLED.sendBuffer();					// transfer internal memory to the display
   }
 }
 
@@ -171,7 +179,7 @@ void updateLightPattern(int code){
 }
 
 void setup(void) {
-  u8g2.begin();
+  g_OLED.begin();
   reader.init();
   
   FastLED.addLeds<CHIP_SET, DATA_PIN, COLOR_ORDER>(g_leds, NUM_LEDS);
