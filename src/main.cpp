@@ -30,16 +30,10 @@
 
 CRGB g_leds[NUM_LEDS]; //create our LED array object for all our LEDs
 int lastCode = -1;
-unsigned long lastScreenUpdate = 0;
 
 PinReader reader = PinReader();
 
-//always use a hardware (HW) version of the screen when possible to avoid studdering in light effects
-// U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);   // Adafruit Feather ESP8266/32u4 Boards + FeatherWing OLED
-U8G2_SSD1306_128X64_NONAME_F_SW_I2C g_OLED(U8G2_R2, OLED_CLOCK, OLED_DATA, OLED_RESET);
-
-
-
+U8G2 g_OLED;
 
 Pulse pulse = Pulse();
 Fire fire = Fire();
@@ -49,9 +43,7 @@ Bounce bounce = Bounce();
 Twinkle twinkle = Twinkle();
 
 void updateCodeOnScreen(int code){
-  if (lastCode != code || (millis() - lastScreenUpdate) > 5000) //update if code changed or it has been X seconds since last update
-  {
-    lastScreenUpdate = millis();
+  if (lastCode != code) { //update if code changed 
     std::string intStr = "Code " + std::to_string(code);
 
     g_OLED.clearBuffer();					// clear the internal memory
@@ -69,17 +61,17 @@ void initLightPattern(int code){
   switch (code)
   {
     case MODE_DANGER: {
-        pulse.init(CRGB::Red, 20);
-        break;
+      pulse.init(CRGB::Red, 20);
+      break;
     }
     case MODE_INTAKE: {
-        pulse.init(CRGB::Blue,  10);
-        break;
+      pulse.init(CRGB::Blue,  10);
+      break;
     }
     case MODE_HAS_NOTE: {
-        CRGB color = CRGB(255,50,0); //orange
-        beats.init(color,color,color,color);
-        break;
+      CRGB color = CRGB(255,50,0); //orange
+      beats.init(color,color,color,color);
+      break;
     }
     case MODE_AIMING: {
       fill_solid(g_leds, NUM_LEDS, CRGB::Yellow);
@@ -107,11 +99,11 @@ void initLightPattern(int code){
       break;
     }
     case MODE_NO_AUTO: {
-        //police
-        CRGB c1 = CRGB::Red;
-        CRGB c2 = CRGB::Blue;
-        beats.init(c1, c2, c1, c2);
-        break;
+      //police
+      CRGB c1 = CRGB::Red;
+      CRGB c2 = CRGB::Blue;
+      beats.init(c1, c2, c1, c2);
+      break;
     }
     case MODE_BLUE_AUTO: {
       ice.init();
@@ -122,7 +114,7 @@ void initLightPattern(int code){
       break;
     }
     case MODE_IS_AMP_IDLING: {
-      bounce.init(CRGB::Turquoise, CRGB::HotPink, 4, 30, 15);
+      bounce.init(CRGB::Red, CRGB::Green, 4, 30, 15);
       break;
     }
     case 20: {
@@ -165,14 +157,15 @@ void updateLightPattern(int code){
       break;
     }
     case MODE_BLUE_AUTO:{
-            ice.updateSplit();
+      ice.updateSplit();
       break;
     }
     case MODE_RED_AUTO: {
       fire.updateSplit();
       break;
     }
-    case 20: {
+    case 20:
+    case MODE_IS_AMP_IDLING: {
       bounce.update();
       break;
     }
@@ -184,8 +177,29 @@ void updateLightPattern(int code){
 }
 
 void setup(void) {
+
+  if (IS_ON_ROBOT){
+
+    //always use a hardware (HW) version of the screen when possible to avoid studdering in light effects
+    U8G2_SSD1306_128X64_NONAME_F_SW_I2C display(U8G2_R2, OLED_CLOCK, OLED_DATA, OLED_RESET); // roborio
+    g_OLED = display;
+    
+    //int pins[8] = {1,2,3,4,5,6,7,19};
+    int pins[8] = {1,2,3,4,5,0,0,0}; //this robot only has 5 pins for lights available
+    reader.init(pins);
+
+  } else { //testing 
+
+    //always use a hardware (HW) version of the screen when possible to avoid studdering in light effects
+    U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C display(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);   // Adafruit Feather ESP8266/32u4 Boards + FeatherWing OLED
+    g_OLED = display;
+    
+    int pins[8] = {13,12,14,27,26,25,33,32};
+    reader.init(pins);
+
+  }
+
   g_OLED.begin();
-  reader.init();
   
   FastLED.addLeds<CHIP_SET, DATA_PIN, COLOR_ORDER>(g_leds, NUM_LEDS);
   FastLED.setMaxPowerInVoltsAndMilliamps(VOLTS, MAX_AMPS);
@@ -196,20 +210,12 @@ void setup(void) {
 
 void loop(void) {
   int code = reader.read();
-  updateCodeOnScreen(code);
-
   if (lastCode != code)
   {
     initLightPattern(code);    
   }
+
   updateLightPattern(code);
+  updateCodeOnScreen(code); //do this after setting lights, some screens cause a delay
   lastCode = code;
 }
-
-
-// void DoSomething() {    
-//     EVERY_N_MILLISECONDS(10) {
-
-
-//     }
-//}
