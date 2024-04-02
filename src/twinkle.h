@@ -19,7 +19,7 @@ public:
     }
 
     void update() {
-        EVERY_N_MILLISECONDS(100) {
+        EVERY_N_MILLISECONDS(10) {
             
             for (int i = 0; i < num; i++) {
                g_leds[random8(NUM_LEDS)] = color;

@@ -9,6 +9,7 @@
 #include "beats.h"
 #include "bounce.h"
 #include "twinkle.h"
+#include "tetris.h"
 
 #define MODE_OFF 0
 #define MODE_DANGER 1
@@ -23,6 +24,7 @@
 #define MODE_BLUE_AUTO 10
 #define MODE_RED_AUTO 11
 #define MODE_IS_AMP_IDLING 12
+#define TETRIS 22
 
 #define OLED_CLOCK 18
 #define OLED_DATA 17
@@ -41,6 +43,8 @@ Ice ice = Ice();
 Beats beats = Beats();
 Bounce bounce = Bounce();
 Twinkle twinkle = Twinkle();
+Tetris tetris = Tetris();
+
 
 void updateCodeOnScreen(int code){
   if (lastCode != code) { //update if code changed 
@@ -124,6 +128,9 @@ void initLightPattern(int code){
     case 21: {
       twinkle.init(CRGB::Yellow, 2);
     }
+    case 22: {
+      tetris.init(CRGB::Yellow, CRGB::Blue, 4, 30, 50);
+    }
   }
 }
 
@@ -172,6 +179,9 @@ void updateLightPattern(int code){
     case 21: {
       twinkle.update();
       break;
+    }
+    case 22: {
+      tetris.update();
     }
   }
 }
