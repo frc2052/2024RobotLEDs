@@ -47,8 +47,19 @@ public:
             for (int i = 0; i < currentStackSize - 1; i++) {
                 g_leds[24 - i] = color1;
                 g_leds[25 + i] = color2;
+                currentStackSize++;
+                pos1 = 0;
+                pos2 = 49;
             }
+        } else if (currentStackSize >= 25) {
+            currentStackSize = 0
+            fadeToBlackBy(g_leds, NUM_LEDS, fSpeed);
+        } else {
+            pos1++;
+            pos2--;
         }
+        g_leds[pos1] = color1;
+        g_leds[pos2] = color2;
 
             fadeToBlackBy(g_leds, NUM_LEDS, fSpeed);
             // g_leds[47] = color1;
