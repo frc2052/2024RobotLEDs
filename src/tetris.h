@@ -12,33 +12,34 @@ private:
 CRGB color1 = CRGB::Red;
 CRGB color2 = CRGB::Blue;
 int currentStackSize = 0;
-int blockSize = 1;
+int bSize = 1;
 int pos1 = 0;
 int pos2 = 49;
 int speed = 10;
 bool forward = true;
 bool onColor1 = true;
 int fSpeed = 80;
+int pWidth = 1;
 
 
 
 public:
 
-    void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed, int blockSize) {
+    void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed, int blkSize) {
         color1 = pulseColor1;
         color2 = pulseColor2;
         pWidth = pulseWidth;
         speed = pulseSpeed; 
-        this.blockSize = blockSize;
+        bSize = blkSize;
     }
 
-    void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed, int blockSize, int fadeSpeed){
+    void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed, int blkSize, int fadeSpeed){
         color1 = pulseColor1;
         color2 = pulseColor2;
         pWidth = pulseWidth;
         speed = pulseSpeed; 
         fSpeed = fadeSpeed;
-        this.blockSize = blockSize;
+        bSize = blkSize;
     }
 
     void update() {
@@ -52,7 +53,7 @@ public:
                 pos2 = 49;
             }
         } else if (currentStackSize >= 25) {
-            currentStackSize = 0
+            currentStackSize = 0;
             fadeToBlackBy(g_leds, NUM_LEDS, fSpeed);
         } else {
             pos1++;
