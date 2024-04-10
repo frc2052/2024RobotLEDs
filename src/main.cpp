@@ -10,6 +10,7 @@
 #include "bounce.h"
 #include "twinkle.h"
 #include "tetris.h"
+#include "siren.h"
 
 #define MODE_OFF 0
 #define MODE_DANGER 1
@@ -30,6 +31,10 @@
 #define OLED_DATA 17
 #define OLED_RESET 21
 
+//info about cart:
+//150 LEDS total
+//117 LEDS in the main loop, 33 stacked on top of each other
+
 CRGB g_leds[NUM_LEDS]; //create our LED array object for all our LEDs
 int lastCode = -1;
 
@@ -44,6 +49,7 @@ Beats beats = Beats();
 Bounce bounce = Bounce();
 Twinkle twinkle = Twinkle();
 Tetris tetris = Tetris();
+Siren siren = Siren();
 
 
 void updateCodeOnScreen(int code){
@@ -131,6 +137,9 @@ void initLightPattern(int code){
     case 22: {
       tetris.init(CRGB::Yellow, CRGB::Blue, 4, 30, 50);
     }
+    case 24: {
+      siren.init();
+    }
   }
 }
 
@@ -182,6 +191,9 @@ void updateLightPattern(int code){
     }
     case 22: {
       tetris.update();
+    }
+    case 24: {
+      siren.update();
     }
   }
 }

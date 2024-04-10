@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #define DATA_PIN (IS_ON_ROBOT ? 48 : 2) //robot uses pin 48, test rig uses 2
-#define NUM_LEDS 50 //how many LEDs are in your strip/panel
+#define NUM_LEDS 148 //how many LEDs are in your strip/panel
 #define COLOR_ORDER GRB //surprisingly, many LED strips don't use the color order Red,Green,Blue
 #define CHIP_SET WS2812B //KnightKrawler uses WS2812B Leds, but there are many other options
 #define BRIGHTNESS 255 //255 is maximum brightness, lower this value to limit brightness
