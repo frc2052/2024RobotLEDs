@@ -9,6 +9,7 @@
 #include "beats.h"
 #include "bounce.h"
 #include "twinkle.h"
+#include "flash.h"
 
 #define MODE_OFF 0
 #define MODE_DANGER 1
@@ -41,6 +42,7 @@ Ice ice = Ice();
 Beats beats = Beats();
 Bounce bounce = Bounce();
 Twinkle twinkle = Twinkle();
+Flash flash = Flash();
 
 void updateCodeOnScreen(int code){
   if (lastCode != code) { //update if code changed 
@@ -65,7 +67,8 @@ void initLightPattern(int code){
       break;
     }
     case MODE_INTAKE: {
-      pulse.init(CRGB::Blue,  10);
+      // pulse.init(CRGB::Blue,  10);
+      flash.init(CRGB:White, 25, 3);
       break;
     }
     case MODE_HAS_NOTE: {
@@ -137,7 +140,8 @@ void updateLightPattern(int code){
     }
     case MODE_DANGER:
     case MODE_INTAKE: {
-      pulse.update();    
+      //pulse.update();
+      flash.update();    
       break;
     }
     case MODE_HAS_NOTE: {
