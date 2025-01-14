@@ -60,40 +60,40 @@ void initLightPattern(int code){
 
   switch (code)
   {
-    case MODE_DANGER: {
+    case MODE_DANGER: { //1
       pulse.init(CRGB::Red, 20);
       break;
     }
-    case MODE_INTAKE: {
+    case MODE_INTAKE: { //2
       pulse.init(CRGB::Blue,  10);
       break;
     }
-    case MODE_HAS_NOTE: {
+    case MODE_HAS_NOTE: { //3
       CRGB color = CRGB(255,50,0); //orange
-      beats.init(color,color,color,color);
+      beats.init(CRGB::Blue,CRGB::Red,CRGB::Green,color);
       break;
     }
-    case MODE_AIMING: {
+    case MODE_AIMING: { //4
       fill_solid(g_leds, NUM_LEDS, CRGB::Yellow);
       FastLED.show();
       break;
     }
-    case MODE_AIMING_ON_TARGET: {
+    case MODE_AIMING_ON_TARGET: { // 5
       fill_solid(g_leds, NUM_LEDS, CRGB::Purple);
       FastLED.show();
       break;
     }
-    case MODE_SHOOTING: {
+    case MODE_SHOOTING: { // 6
       fill_solid(g_leds, NUM_LEDS, CRGB::White);
       FastLED.show();
       break;
     }
-    case MODE_SHOOTING_ON_TARGET: {
+    case MODE_SHOOTING_ON_TARGET: { // 7
       fill_solid(g_leds, NUM_LEDS, CRGB::Green);
       FastLED.show();
       break;
     }
-    case MODE_DONE_SHOOTING: {
+    case MODE_DONE_SHOOTING: { //
       fill_solid(g_leds, NUM_LEDS, CRGB::Red);
       FastLED.show();
       break;
@@ -102,7 +102,8 @@ void initLightPattern(int code){
       //police
       CRGB c1 = CRGB::Red;
       CRGB c2 = CRGB::Blue;
-      beats.init(c1, c2, c1, c2);
+      CRGB c3 = CRGB::Black;
+      beats.init(c1, c3, c3, c3);
       break;
     }
     case MODE_BLUE_AUTO: {
