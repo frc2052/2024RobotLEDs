@@ -64,11 +64,11 @@ void initLightPattern(int code){
   switch (code)
   {
     case MODE_DANGER: { //1
-      pulse.init(CRGB::Red, 20);
+      pulse.init(CRGB::Red, 10);
       break;
     }
     case MODE_INTAKE: { //2
-      pulse.init(CRGB::Blue,  10);
+      pulse.init(CRGB::Blue, 10);
       break;
     }
     case MODE_HAS_NOTE: { //3
