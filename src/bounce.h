@@ -16,18 +16,11 @@ int pWidth = 4;
 int speed = 10;
 bool forward = true;
 bool onColor1 = true;
-int fSpeed = 80;
+int fSpeed = 0;
 
 
 
 public:
-
-    void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed) {
-        color1 = pulseColor1;
-        color2 = pulseColor2;
-        pWidth = pulseWidth;
-        speed = pulseSpeed; 
-    }
 
     void init(CRGB pulseColor1, CRGB pulseColor2, int pulseWidth, int pulseSpeed, int fadeSpeed){
         color1 = pulseColor1;
@@ -38,6 +31,9 @@ public:
     }
 
     void update() {
+        EVERY_N_SECONDS(speed){
+            speed = speed - 10;
+        }
         EVERY_N_MILLISECONDS(speed){
             if(forward){
                 cPos = cPos + 1;

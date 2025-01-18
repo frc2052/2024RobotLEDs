@@ -9,6 +9,7 @@
 #include "beats.h"
 #include "bounce.h"
 #include "twinkle.h"
+#include "tetris.h"
 
 #define MODE_OFF 0
 #define MODE_DANGER 1
@@ -22,7 +23,8 @@
 #define MODE_NO_AUTO 9
 #define MODE_BLUE_AUTO 10
 #define MODE_RED_AUTO 11
-#define MODE_IS_AMP_IDLING 12
+#define BOUNCE_TEST 13
+#define TETRIS_TEST 14
 
 #define OLED_CLOCK 18
 #define OLED_DATA 17
@@ -41,6 +43,7 @@ Ice ice = Ice();
 Beats beats = Beats();
 Bounce bounce = Bounce();
 Twinkle twinkle = Twinkle();
+Tetris tetris = Tetris();
 
 void updateCodeOnScreen(int code){
   if (lastCode != code) { //update if code changed 
@@ -84,8 +87,7 @@ void initLightPattern(int code){
       break;
     }
     case MODE_SHOOTING: { // 6
-      fill_solid(g_leds, NUM_LEDS, CRGB::White);
-      FastLED.show();
+      bounce.init(CRGB::Red, CRGB::Blue, 4, 30, 15);
       break;
     }
     case MODE_SHOOTING_ON_TARGET: { // 7
@@ -93,12 +95,12 @@ void initLightPattern(int code){
       FastLED.show();
       break;
     }
-    case MODE_DONE_SHOOTING: { //
+    case MODE_DONE_SHOOTING: { // 8
       fill_solid(g_leds, NUM_LEDS, CRGB::Red);
       FastLED.show();
       break;
     }
-    case MODE_NO_AUTO: {
+    case MODE_NO_AUTO: { //9
       //police
       CRGB c1 = CRGB::Red;
       CRGB c2 = CRGB::Blue;
@@ -106,24 +108,21 @@ void initLightPattern(int code){
       beats.init(c1, c3, c3, c3);
       break;
     }
-    case MODE_BLUE_AUTO: {
+    case MODE_BLUE_AUTO: { //10
       ice.init();
       break;
     }
-    case MODE_RED_AUTO: {
+    case MODE_RED_AUTO: { //11
       fire.init();
       break;
     }
-    case MODE_IS_AMP_IDLING: {
-      bounce.init(CRGB::Red, CRGB::Green, 4, 30, 15);
+    case TETRIS_TEST: { //12
+      tetris.init(CRGB::Blue, CRGB::Red,10,40);
       break;
     }
-    case 20: {
-      bounce.init(CRGB::Red, CRGB::Blue, 4, 30, 15);
+    case BOUNCE_TEST: { //13
+      bounce.init(CRGB::Red, CRGB::Green, 3, 80, 150);
       break;
-    }
-    case 21: {
-      twinkle.init(CRGB::Yellow, 2);
     }
   }
 }
@@ -165,15 +164,15 @@ void updateLightPattern(int code){
       fire.updateSplit();
       break;
     }
-    case 20:
-    case MODE_IS_AMP_IDLING: {
+    case TETRIS_TEST: {
+      tetris.update();
+      break;
+    }
+    case BOUNCE_TEST: {
       bounce.update();
       break;
     }
-    case 21: {
-      twinkle.update();
-      break;
-    }
+  
   }
 }
 

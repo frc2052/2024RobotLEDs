@@ -1,4 +1,4 @@
-  #ifndef BEATS_FUNC_H
+#ifndef BEATS_FUNC_H
 #define BEATS_FUNC_H
 
 #include <FastLED.h>
